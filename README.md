@@ -1,16 +1,16 @@
 # Python FastAPI Project
 
-A simple FastAPI web application with file upload functionality.
+A simple FastAPI web application with file upload functionality and multiple API endpoints.
 
 ## Project Structure
 
 ```
-Python/
+python_setup/
 ├── main.py              # Main FastAPI application
-├── app.py               # Additional application file
 ├── venv/                # Virtual environment
 ├── README.md            # This file
-└── requirements.txt     # Project dependencies
+├── requirements.txt     # Project dependencies
+└── __pycache__/         # Python cache files
 ```
 
 ## Prerequisites
@@ -25,10 +25,10 @@ Python/
 ```bash
 # If using git
 git clone <repository-url>
-cd Python
+cd python_setup
 
 # Or simply navigate to the project directory
-cd path/to/your/Python/project
+cd path/to/your/python_setup/project
 ```
 
 ### 2. Create Virtual Environment
@@ -51,9 +51,11 @@ source venv/bin/activate
 # Install required packages
 pip install fastapi uvicorn python-multipart
 
-# Or install from requirements.txt (if available)
+# Or install from requirements.txt
 pip install -r requirements.txt
 ```
+
+**Note**: The project already includes a virtual environment with dependencies installed. If you're using the existing venv, you can skip this step.
 
 ### 4. Run the Application
 
@@ -70,17 +72,68 @@ The application will be available at: `http://localhost:8000`
 ## API Endpoints
 
 ### GET /
-- **Description**: Welcome page
-- **Response**: `{"message": "Welcome to main page user"}`
+- **Description**: Root endpoint - Welcome page
+- **Method**: GET
+- **Response**: 
+  ```json
+  {
+    "message": "Welcome to Main "
+  }
+  ```
 
 ### GET /contact
-- **Description**: Contact page
-- **Response**: `{"Message": "Welcome to Contact page"}`
+- **Description**: Contact page endpoint
+- **Method**: GET
+- **Response**: 
+  ```json
+  {
+    "Message": "Welcome to Contact page"
+  }
+  ```
 
 ### POST /upload
-- **Description**: File upload endpoint
-- **Parameters**: `files` (list of uploaded files)
-- **Response**: `{"status": "File received"}`
+- **Description**: File upload endpoint for handling multiple files
+- **Method**: POST
+- **Content-Type**: `multipart/form-data`
+- **Parameters**: 
+  - `files`: List of uploaded files (multiple files supported)
+- **Response**: 
+  ```json
+  {
+    "status": "File received"
+  }
+  ```
+- **Note**: Currently prints file information to console for debugging
+
+## Code Structure
+
+### main.py Overview
+
+The application is built using FastAPI and consists of:
+
+```python
+from fastapi import FastAPI, UploadFile
+import uvicorn
+
+app = FastAPI()
+```
+
+**Key Components:**
+- **FastAPI**: Modern web framework for building APIs
+- **UploadFile**: Special type for handling file uploads
+- **uvicorn**: ASGI server for running the application
+
+### Application Runner
+
+```python
+if __name__ == "__main__":
+    uvicorn.run("main:app")
+```
+
+This pattern ensures:
+- Server starts only when running the script directly (`python main.py`)
+- Allows importing the app in other modules without starting the server
+- Uses uvicorn to serve the FastAPI application on `http://localhost:8000`
 
 ## API Documentation
 
@@ -88,6 +141,32 @@ Once the server is running, you can access:
 
 - **Interactive API docs (Swagger UI)**: `http://localhost:8000/docs`
 - **Alternative API docs (ReDoc)**: `http://localhost:8000/redoc`
+
+## Testing the API
+
+### Using Browser
+- Visit `http://localhost:8000` for the root endpoint
+- Visit `http://localhost:8000/contact` for the contact endpoint
+
+### Using curl
+```bash
+# Test root endpoint
+curl http://localhost:8000/
+
+# Test contact endpoint
+curl http://localhost:8000/contact
+
+# Test file upload
+curl -X POST "http://localhost:8000/upload" \
+     -H "Content-Type: multipart/form-data" \
+     -F "files=@path/to/your/file.txt"
+```
+
+### Using the Interactive Docs
+1. Start the server: `python main.py`
+2. Open `http://localhost:8000/docs` in your browser
+3. Use the "Try it out" buttons to test each endpoint
+4. For file upload, use the file picker in the Swagger UI
 
 ## Development
 
