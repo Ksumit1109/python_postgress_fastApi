@@ -5,7 +5,7 @@ app = FastAPI()
 
 @app.get("/")
 def read_root():
-    return{"message": "Welcome to main page user"}
+    return{"message": "Welcome to Main "}
 
 @app.get("/contact")
 def read_contact():
@@ -17,5 +17,5 @@ def handleImage(files: list[UploadFile]):
     print(files)
     return{"status" : "File received"}
 
-
-uvicorn.run(app)
+if __name__ == "__main__":
+    uvicorn.run("main:app")
