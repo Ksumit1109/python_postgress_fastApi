@@ -13,7 +13,7 @@ def startup_event():
 
 @app.get("/")
 def read_root():
-    return{"message": "Welcome to main page user"}
+    return{"message": "Welcome to Main page"}
 
 @app.get("/users/", response_model=list[schemas.User])
 def get_all_users(db: Session = Depends(get_db)):
@@ -29,5 +29,5 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
 #     print(files)
 #     return{"status" : "File received"}
 
-
-uvicorn.run(app)
+if __name__ == "__main__":
+    uvicorn.run("main:app", reload=True)
