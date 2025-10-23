@@ -34,5 +34,14 @@ def path_user(user_id: str, updates: schemas.UserUpdate, db: Session = Depends(g
     return updated_user
 
 
+@app.delete('/users/{user_id}', response_model=schemas.User)
+def delete_user(user_id: str, db: Session = Depends(get_db)):
+    delete_user = services.delete_user(db, user_id)
+    if not delete_user:
+        raise HTTPException(status_code=404, detail="user not found")
+    return delete_user
+
+
+
 if __name__ == "__main__":
     uvicorn.run("main:app", reload=True)
