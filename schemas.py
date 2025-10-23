@@ -5,6 +5,7 @@ class userBase(BaseModel):
     gender: str
     email: str
     birthYear: int
+    password: str | int
 
 
 class UserCreate(userBase):

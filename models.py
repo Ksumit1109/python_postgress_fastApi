@@ -8,3 +8,4 @@ class User(Base):
     gender = Column(String, index=True)
     email = Column(String, index=True)
     birthYear = Column(Integer)
+    password = Column(String(30))
