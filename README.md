@@ -69,6 +69,109 @@ uvicorn main:app --reload
 
 The application will be available at: `http://localhost:8000`
 
+
+## 🧩 Step-by-Step Implementation of Alembic with SQLAlchemy 
+
+**Alembic** is a database migration tool for **SQLAlchemy** projects.  
+It helps manage changes to your database schema — like creating or altering tables — with version control.
+
+---
+
+### 🔍 1. What is Alembic?
+Alembic allows you to manage database schema changes over time.  
+Instead of manually altering tables in production, you write **migration scripts**, and Alembic applies those changes automatically.
+
+---
+
+### ⚙️ 2. Step-by-Step Guide
+
+#### 🪄 **Step 1: Install Alembic**
+Run in your terminal:
+```bash
+pip install alembic
+```
+
+---
+
+#### 🧱 **Step 2: Initialize Alembic in Your Project**
+In your project root folder, run:
+```bash
+alembic init alembic
+```
+This creates an `alembic` directory containing migration scripts and an `alembic.ini` config file.
+
+---
+
+#### ⚙️ **Step 3: Configure Alembic**
+Open **`alembic.ini`** and update your database connection string:
+
+**For SQLite:**
+```ini
+sqlalchemy.url = sqlite:///./test.db
+```
+
+**For PostgreSQL:**
+```ini
+sqlalchemy.url = postgresql://username:password@localhost:5432/databasename
+```
+
+---
+
+#### ✏️ **Step 4: Create a Migration (Revision)**
+To create a new migration file, run:
+```bash
+alembic revision -m "create users table"
+```
+
+This generates a new Python script in **`alembic/versions/`**.  
+Inside the generated file, define your schema changes:
+
+```python
+from alembic import op
+import sqlalchemy as sa
+
+def upgrade():
+    op.create_table(
+        'users',
+        sa.Column('id', sa.Integer, primary_key=True),
+        sa.Column('name', sa.String(), nullable=False),
+    )
+
+def downgrade():
+    op.drop_table('users')
+```
+
+---
+
+#### 🚀 **Step 5: Apply the Migration (Upgrade)**
+Run:
+```bash
+alembic upgrade head
+```
+This command upgrades your database to the latest revision, applying the schema changes described in your migration script.
+
+---
+
+### 🧠 3. Review & Practice
+
+- Can you describe the difference between `alembic revision` and `alembic upgrade`?  
+- What should the `upgrade()` and `downgrade()` functions do?  
+- Try adding a new column or modifying a table — how would you handle this with a new migration?
+
+---
+
+### ✅ Quick Summary
+
+- 📦 Install Alembic  
+- 🏗️ Initialize in your project  
+- 🔗 Configure the database URL  
+- ✍️ Create migrations with `alembic revision`  
+- 🚀 Apply migrations with `alembic upgrade`
+
+---
+
+
+
 ## API Endpoints
 
 ### GET /
