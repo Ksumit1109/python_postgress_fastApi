@@ -1,9 +1,10 @@
+import uuid
 from db import Base
-from sqlalchemy import Integer, Column, String
+from sqlalchemy import Column, String, Integer
 
 class User(Base):
     __tablename__ = "user"
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(String, primary_key=True, index=True, default=lambda: str(uuid.uuid4()))
     name = Column(String, index=True)
     gender = Column(String, index=True)
     email = Column(String, index=True)
