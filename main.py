@@ -24,10 +24,15 @@ def get_all_users(db: Session = Depends(get_db)):
 def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     return services.create_user(db, user)    
 
-# @app.post("/upload")
-# def handleImage(files: list[UploadFile]):
-#     print(files)
-#     return{"status" : "File received"}
+
+# 👇 PATCH route
+@app.patch('/users/{user_id}',  response_model=schemas.User)
+def path_user(user_id: str, updates: schemas.UserUpdate, db: Session = Depends(get_db)):
+    updated_user = services.update_user(db, user_id, updates)
+    if not updated_user:
+        raise HTTPException(status_code=404, detail="user not found")
+    return updated_user
+
 
 if __name__ == "__main__":
     uvicorn.run("main:app", reload=True)
